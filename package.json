@@ -1,0 +1,40 @@
+{
+  "name": "decoder.ts",
+  "version": "0.0.0",
+  "description": "Library for turning arbitrary data into typed data",
+  "keywords": [
+    "decoder",
+    "decode",
+    "parse",
+    "json",
+    "extract",
+    "read",
+    "data",
+    "typed",
+    "typescript"
+  ],
+  "dependencies": {
+    "result.ts": "^0.2.0"
+  },
+  "homepage": "https://github.com/Gozala/decoder.ts",
+  "main": "./Decoder",
+  "typings": "./Decoder.d.ts",
+  "repository": "https://github.com/gozala/result.ts",
+  "author": "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)",
+  "scripts": {
+    "test": "./scripts/test-tape",
+    "test:tape": "./scripts/test-tape",
+    "build": "./scripts/build-node",
+    "prepare": "./scripts/build-node",
+    "build:schema": "./scripts/build-schema",
+    "build:node": "./scripts/build-node",
+    "build:clean": "./scripts/build-clean"
+  },
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "@types/tape": "^4.2.30",
+    "tape": "^4.6.3",
+    "ts-node": "^3.0.4",
+    "typescript": "^2.3.2"
+  }
+}
