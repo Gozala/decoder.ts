@@ -46,7 +46,7 @@ var ok = decode(null, Decoder.succeed({ hello: 'you'}))
 var notok = decode(null, Decoder.fail('whatever'))
 var arr = decode(null, Decoder.array(Decoder.array(Decoder.integer)))
 var kv = decode(null, Decoder.entries(Decoder.array(Decoder.float)))
-var dict = decode(null, Decoder.dictionary(Decoder.array(Decoder)))
+var dict = decode(null, Decoder.dictionary(Decoder.array(Decoder.float)))
 
 // TODO:!!!
 var wtv = decode(null, Decoder.either(Decoder.string, Decoder.boolean))

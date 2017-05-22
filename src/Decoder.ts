@@ -97,9 +97,35 @@ class EitherDecoder <a> implements Decoders.Either<a> {
   }
 }
 
-export const either =
-  <a> (decoder:Decoder<a>, ...rest:Decoder<a>[]):Decoder<a> =>
-  new EitherDecoder([decoder, ...rest])
+export function either <a, b> (d1:Decoder<a>, d2:Decoder<b>):Decoder<a|b>
+export function either <a, b, c> (d1:Decoder<a>,
+                                  d2:Decoder<b>,
+                                  d3:Decoder<c>):Decoder<a|b|c>
+export function either <a, b, c, d> (d1:Decoder<a>,
+                                      d2:Decoder<b>,
+                                      d3:Decoder<c>,
+                                      d4:Decoder<d>):Decoder<a|b|c|d>
+export function either <a, b, c, d, e> (d1:Decoder<a>,
+                                        d2:Decoder<b>,
+                                        d3:Decoder<c>,
+                                        d4:Decoder<d>,
+                                        d5:Decoder<e>):Decoder<a|b|c|d|e>
+export function either <a, b, c, d, e, f> (d1:Decoder<a>,
+                                            d2:Decoder<b>,
+                                            d3:Decoder<c>,
+                                            d4:Decoder<d>,
+                                            d5:Decoder<e>,
+                                            d6:Decoder<f>):Decoder<a|b|c|d|e|f>
+export function either <a, b, c, d, e, f, g> (d1:Decoder<a>,
+                                              d2:Decoder<b>,
+                                              d3:Decoder<c>,
+                                              d4:Decoder<d>,
+                                              d5:Decoder<e>,
+                                              d6:Decoder<f>,
+                                              d7:Decoder<g>):Decoder<a|b|c|d|e|f|g>
+export function either <a> (decoder:Decoder<a>, ...rest:Decoder<a>[]):Decoder<a> {
+  return new EitherDecoder([decoder, ...rest])
+}
 
 class SucceedDecoder <a> implements Decoders.Ok<a> {
   type:Type.Ok = Type.Ok
@@ -164,7 +190,7 @@ class RecordBaseDecoder extends Pipeline<{}> implements Decoders.BaseStruct {
   }
 }
 
-class RecordExtensionDecoder <base, key extends string, value> extends Pipeline<base & Record<key, value>> implements Decoders.Extension<base, key, value> {
+class RecordExtensionDecoder <base, key extends string, value> extends Pipeline<base & Record<key, value>> implements Decoders.Extension<base & Record<key, value>, base, key, value> {
   type:Type.RecordExtension = Type.RecordExtension
   constructor(public baseDecoder:Decoder<base>,
               public name:key,

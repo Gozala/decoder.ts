@@ -18,6 +18,7 @@ export enum Type {
   Error
 }
 
+
 export interface String {
   type:Type.String
 }
@@ -100,36 +101,39 @@ export interface Pipeline <record> {
 }
 
 export type Struct <record, key extends string, value> =
-  & Extension<record, key, value>
+  & Extension<record & Record<key, value>, record, key, value>
   & Pipeline<record & Record<key, value>>
 
 export interface BaseStruct {
   type:Type.RecordBase
 }
 
-export interface Extension <base, key extends string, value> {
+export interface Extension <record extends base & Record<key, value>, base, key extends string, value> {
   type:Type.RecordExtension
   baseDecoder:Decoder<base>
   fieldDecoder:Decoder<value>
   name:key
+  _?:record
 }
 
 
 export type Decoder <a> =
+  | Error
   | String
   | Boolean
   | Float
   | Integer
+  | Ok <a>
   | Undefined <a>
   | Null <a>
   | Maybe <a>
   | NamedMember <a>
   | IndexedMember <a>
-  | Ok <a>
-  | Error
-  | Array<any>
+  | Either <a>
+
+  | Array <any>
   | Entries <any>
   | Dictionary <any>
-  | Either <a>
+
   | BaseStruct
-  | Extension<any, any, any>
+  | Extension<a, any, any, any>

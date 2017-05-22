@@ -10,17 +10,29 @@ export type Read <a> =
   | a
 
 
+export function read <a> (input:any, decoder:Decoders.Error):Error
+export function read <a extends string> (input:any, decoder:Decoders.String):Read<a>
+export function read <a extends boolean> (input:any, decoder:Decoders.Boolean):Read<a>
+export function read <a extends Float> (input:any, decoder:Decoders.Float):Read<a>
+export function read <a extends Integer> (input:any, decoder:Decoders.Integer):Read<a>
 
-export function read (input:any, decoder:Decoders.String):Read<string>
-export function read (input:any, decoder:Decoders.Boolean):Read<boolean>
-export function read (input:any, decoder:Decoders.Integer):Read<Integer>
-export function read (input:any, decoder:Decoders.Float):Read<Float>
-export function read <a> (input:any, decoder:Decoders.Array<a>):Read<a[]>
-export function read <a> (input:any, decoder:Decoders.Entries<a>):Read<[string, a]>
-export function read <a> (input:any, decoder:Decoders.Dictionary<a>):Read<Dictionary<a>>
-export function read (input:any, decoder:Decoders.BaseStruct):Read<{}>
-export function read <base, key extends string, value> (input:any, decoder:Decoders.Extension<base, key, value>):Read<base & Record<key, value>>
+export function read <a> (input:any, decoder:Decoders.Ok<a>):Read<a>
+export function read <a> (input:any, decoder:Decoders.Undefined<a>):Read<a>
+export function read <a> (input:any, decoder:Decoders.Null<a>):Read<a>
+export function read <a> (input:any, decoder:Decoders.Maybe<a>):Read<a>
+export function read <a> (input:any, decoder:Decoders.NamedMember<a>):Read<a>
+export function read <a> (input:any, decoder:Decoders.IndexedMember<a>):Read<a>
+export function read <a> (input:any, decoder:Decoders.Either<a>):Read<a>
+
+export function read <array extends a[], a> (input:any, decoder:Decoders.Array<a>):Read<array>
+export function read <pair extends [string, a], a> (input:any, decoder:Decoders.Entries<a>):Read<pair>
+export function read <dict extends Dictionary<a>, a> (input:any, decoder:Decoders.Dictionary<a>):Read<dict>
+
+export function read <a extends {}> (input:any, decoder:Decoders.BaseStruct):Read<a>
+export function read <a extends base & Record<key, value>, base, key extends string, value> (input:any, decoder:Decoders.Extension<a, base, key, value>):Read<a>
+
 export function read <a> (input:any, decoder:Decoder<a>):Read<a>
+
 export function read (input:any, decoder:Decoder<any>):Read<any> {
   switch (decoder.type) {
     case Type.String:
@@ -247,7 +259,7 @@ const readRecordBase = (input:any, _:Decoders.BaseStruct):Read<{}> => {
     }
 }
 
-const readRecordExtension = <base extends {}, key extends string, value> (input:any, decoder:Decoders.Extension<base, key, value>):Read<base & Record<key, value>> => {
+const readRecordExtension = <base extends {}, key extends string, value> (input:any, decoder:Decoders.Extension<base & Record<key, value>, base, key, value>):Read<base & Record<key, value>> => {
   const {baseDecoder, name, fieldDecoder} = decoder
   const record = read(input, baseDecoder)
   const value = read(input, fieldDecoder)
@@ -263,8 +275,8 @@ const readRecordExtension = <base extends {}, key extends string, value> (input:
 }
 
 
-export function decode <base, key extends string, value> (input:any, decoder:Decoders.Extension<base, key, value>):Result<Error, base & Record<key, value>>
-export function decode <a> (input:any, decoder:Decoder<a>):Result<Error, a>
+// export function decode <a extends base & Record<key, value>, base, key extends string, value> (input:any, decoder:Decoders.Extension<a, base, key, value>):Result<Error, a>
+// export function decode <a> (input:any, decoder:Decoder<a>):Result<Error, a>
 export function decode <a> (input:any, decoder:Decoder<a>):Result<Error, a> {
     const data = read(input, decoder)
     const result = data instanceof Error
