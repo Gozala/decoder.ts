@@ -1,0 +1,6 @@
+*.js
+*.d.ts
+!src/**/*.d.ts
+!src/**/*.js
+!test/**/*.js
+!test/**/*.d.ts

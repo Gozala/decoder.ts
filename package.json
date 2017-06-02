@@ -1,6 +1,6 @@
 {
   "name": "decoder.ts",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Library for turning arbitrary data into typed data",
   "keywords": [
     "decoder",
@@ -14,27 +14,31 @@
     "typescript"
   ],
   "dependencies": {
-    "result.ts": "^0.2.0"
+    "dictionary.ts": "^0.1.0",
+    "json.ts": "^0.1.0",
+    "result.ts": "^0.3.1"
   },
   "homepage": "https://github.com/Gozala/decoder.ts",
-  "main": "./Decoder",
-  "typings": "./Decoder.d.ts",
+  "main": "Decoder",
+  "typings": "Decoder.d.ts",
   "repository": "https://github.com/gozala/result.ts",
   "author": "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)",
   "scripts": {
-    "test": "./scripts/test-tape",
-    "test:tape": "./scripts/test-tape",
-    "build": "./scripts/build-node",
-    "prepare": "./scripts/build-node",
-    "build:schema": "./scripts/build-schema",
-    "build:node": "./scripts/build-node",
-    "build:clean": "./scripts/build-clean"
+    "test": "npm run test:tape",
+    "test:tape": "blue-tape -r ts-node/register test/**/*.ts",
+    "build": "npm run build:clean && npm run build:node && npm run build:docs",
+    "prepare": "npm run build:node",
+    "prepublishOnly": "npm run build && npm run test",
+    "build:node": "tsc --project tsconfig.build.json",
+    "build:docs": "typedoc --tsconfig tsconfig.build.json --readme none --theme minimal --out ./docs/",
+    "build:clean": "rm -f ./*.js && rm -f ./*.d.ts"
   },
-  "license": "MPL-2.0",
+  "license": "MIT",
   "devDependencies": {
-    "@types/tape": "^4.2.30",
-    "tape": "^4.6.3",
+    "@types/blue-tape": "^0.1.30",
+    "blue-tape": "^1.0.0",
     "ts-node": "^3.0.4",
+    "typedoc": "^0.7.1",
     "typescript": "^2.3.2"
   }
 }

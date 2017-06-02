@@ -4,10 +4,11 @@ export enum Type {
   Integer,
   Float,
   Array,
+  Entries,
   Dictionary,
   IndexedMember,
   NamedMember,
-  Entries,
+  NamedAccessor,
   Maybe,
   Either,
   Null,
@@ -58,6 +59,12 @@ export interface IndexedMember<a> {
   decoder:Decoder<a>
 }
 
+export interface NamedAccessor<a> {
+  type:Type.NamedAccessor
+  name:string
+  decoder:Decoder<a>
+}
+
 export interface Maybe<a> {
   type:Type.Maybe
   decoder:Decoder<a>
@@ -94,21 +101,19 @@ export interface Dictionary <a> {
 }
 
 export interface Pipeline <record> {
-  custom <key extends string, a> (name:key, decoder:Decoder<a>):Struct<record, key, a>
-  required<key extends string, a> (name:key, decoder:Decoder<a>):Struct<record, key, a>
-  optional<key extends string, a> (name:key, decoder:Decoder<a>, fallback:a):Struct<record, key, a>
-  hardcoded<key extends string, a> (name:key, value:a):Struct<record, key, a>
+  virtual <key extends string, a> (name:key, decoder:Decoder<a>):Struct<record, key, a>
+  field<key extends string, a> (name:key, decoder:Decoder<a>):Struct<record, key, a>
 }
 
 export type Struct <record, key extends string, value> =
-  & Extension<record & Record<key, value>, record, key, value>
+  & ExtensionStruct<record & Record<key, value>, record, key, value>
   & Pipeline<record & Record<key, value>>
 
 export interface BaseStruct {
   type:Type.RecordBase
 }
 
-export interface Extension <record extends base & Record<key, value>, base, key extends string, value> {
+export interface ExtensionStruct <record extends base & Record<key, value>, base extends {}, key extends string, value> {
   type:Type.RecordExtension
   baseDecoder:Decoder<base>
   fieldDecoder:Decoder<value>
@@ -128,6 +133,7 @@ export type Decoder <a> =
   | Null <a>
   | Maybe <a>
   | NamedMember <a>
+  | NamedAccessor <a>
   | IndexedMember <a>
   | Either <a>
 
@@ -136,4 +142,4 @@ export type Decoder <a> =
   | Dictionary <any>
 
   | BaseStruct
-  | Extension<a, any, any, any>
+  | ExtensionStruct<a, any, any, any>
